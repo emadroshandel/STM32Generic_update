@@ -1,19 +1,15 @@
-# STM32GENERIC
-Generic implementation of Arduino for STM32 boards using STM32 HAL. This is an alternative to the [Official implementation](https://github.com/stm32duino/Arduino_Core_STM32) 
+A simple update on the SRM32Generic Library available at https://danieleff.github.io/STM32GENERIC/
 
-Documentation: https://danieleff.github.io/STM32GENERIC/
+Generic implementation of Arduino for STM32 boards using STM32 HAL.
 
-## Installation - Users
+The library, documented in https://danieleff.github.io/STM32GENERIC/, is a powerful tool for programming STM32 processors with various peripherals. I had difficulty in using several peripherals when bit order determination was required. I started to find out the problem what is the problem with the definition of Least Significant Bit First (LSBFIRST) and Most Significant Bit First (MSBFIRST) in the original library. I found out these values have been defined in "Arduino.h" file available in "...\STM32GENERIC-master\STM32\cores\arduino" as follows:
 
-TODO create boards manager package
+#define LSBFIRST 0
 
-## Installation - Developers
+#define MSBFIRST 1
 
-1. Download the latest version from [https://github.com/danieleff/STM32GENERIC](https://github.com/danieleff/STM32GENERIC)
-2. Unzip it into [Arduino]/hardware folder
-3. Install Arduino Zero from the board manager for the arm-none-eabi-gcc compiler
+I changed the above line with the following to provide type safety for these values.
 
-Additional instructions for F7 boards:
+enum BitOrder { LSBFIRST = 0, MSBFIRST = 1 };
 
-1. Download the [latest GNU ARM Embedded Toolchain](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)
-2. Change compiler.path in [platform.txt](https://github.com/danieleff/STM32GENERIC/blob/master/STM32/platform.txt#L21) to point to that you downloaded.
+This change solved the problem that I had for programming the SPI peripherals.
